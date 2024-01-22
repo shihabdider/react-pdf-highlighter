@@ -501,9 +501,8 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
           ref={this.containerNodeRef}
           className="PdfHighlighter"
           onContextMenu={(e) => e.preventDefault()}
-          onScroll={() => console.log('scrolling pdfhighlighter')}
         >
-          <div className="pdfViewer" onScroll={() => console.log('scrolling')}/>
+          <div className="pdfViewer"/>
           {this.renderTip()}
           {typeof enableAreaSelection === "function" ? (
             <MouseSelection
