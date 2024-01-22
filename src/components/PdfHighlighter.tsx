@@ -416,6 +416,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
   };
 
   onSelectionChange = () => {
+    console.log('testing selection change');
     const container = this.containerNode;
     const selection = getWindow(container).getSelection();
 
@@ -449,7 +450,6 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
   onScroll = () => {
     const { onScrollChange } = this.props;
 
-    console.log('testing on scroll');
     onScrollChange();
 
     this.setState(
