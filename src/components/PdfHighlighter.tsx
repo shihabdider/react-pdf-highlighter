@@ -66,6 +66,7 @@ interface Props<T_HT> {
     hideTip: () => void,
     viewportToScaled: (rect: LTWHP) => Scaled,
     screenshot: (position: LTWH) => string,
+    isScrolledTo: boolean
   ) => JSX.Element;
   highlights: Array<T_HT>;
   pdfDocument: PDFDocumentProxy;
@@ -500,8 +501,9 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
           ref={this.containerNodeRef}
           className="PdfHighlighter"
           onContextMenu={(e) => e.preventDefault()}
+          onScroll={() => console.log('scrolling pdfhighlighter')}
         >
-          <div className="pdfViewer" onScroll={() => console.log("scrolling!"}/>
+          <div className="pdfViewer" onScroll={() => console.log('scrolling')}/>
           {this.renderTip()}
           {typeof enableAreaSelection === "function" ? (
             <MouseSelection
