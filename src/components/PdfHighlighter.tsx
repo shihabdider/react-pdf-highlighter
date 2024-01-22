@@ -369,6 +369,12 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
     this.renderHighlightLayers();
   };
 
+  onDocumentReady = () => {
+
+    this.handleScaleValue();
+
+  };
+
   onSelectionChange = () => {
     const container = this.containerNode;
     const selection = getWindow(container).getSelection();
@@ -398,6 +404,21 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
     });
 
     this.debouncedAfterSelection();
+  };
+
+  onScroll = () => {
+    const { onScrollChange } = this.props;
+
+    onScrollChange();
+
+    this.setState(
+      {
+        scrolledToHighlightId: EMPTY_ID,
+      },
+      () => this.renderHighlightLayers()
+    );
+
+    this.viewer.container.removeEventListener("scroll", this.onScroll);
   };
 
   onMouseDown: PointerEventHandler = (event) => {
