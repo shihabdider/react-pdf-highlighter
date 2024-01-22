@@ -79,6 +79,7 @@ interface Props<T_HT> {
   ) => JSX.Element | null;
   enableAreaSelection: (event: MouseEvent) => boolean;
   onScroll: (scrollPosition: { scrollTop: number; scrollLeft: number }) => void;
+  onPdfViewerLoaded: () => void;
 }
 
 const EMPTY_ID = "empty-id";
@@ -178,7 +179,6 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
       new PDFViewer({
         container: this.containerNodeRef!.current!,
         eventBus: this.eventBus,
-        // enhanceTextSelection: true, // deprecated. https://github.com/mozilla/pdf.js/issues/9943#issuecomment-409369485
         textLayerMode: 2,
         removePageBorders: true,
         linkService: this.linkService,
@@ -188,7 +188,6 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
     this.linkService.setDocument(pdfDocument);
     this.linkService.setViewer(this.viewer);
     this.viewer.setDocument(pdfDocument);
-    // debug
     (window as any).PdfViewer = this;
   }
 
@@ -199,7 +198,6 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
 
   attachScrollListener = () => {
     const container = this.containerNode;
-    console.log('attachScrollListener', container);
     if (container) {
       container.addEventListener('scroll', this.handleScroll);
     }
@@ -399,7 +397,8 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
   };
 
   onDocumentReady = () => {
-
+    const { onPdfViewerLoaded } = this.props;
+    onPdfViewerLoaded()
     this.handleScaleValue();
 
   };

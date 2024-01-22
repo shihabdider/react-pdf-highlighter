@@ -148,6 +148,7 @@ class App extends Component<{}, State> {
           <PdfLoader url={url} beforeLoad={<Spinner />}>
             {(pdfDocument) => (
               <PdfHighlighter
+                onPdfViewerLoaded={() => console.log(document.querySelector('.PdfHighlighter'))}
                 onScroll={(pos) => console.log(pos)}
                 pdfDocument={pdfDocument}
                 enableAreaSelection={(event) => event.altKey}
