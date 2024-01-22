@@ -69,8 +69,6 @@ interface Props<T_HT> {
     isScrolledTo: boolean
   ) => JSX.Element;
   highlights: Array<T_HT>;
-  onScrollChange: () => void;
-  scrollRef: (scrollTo: (highlight: T_HT) => void) => void;
   pdfDocument: PDFDocumentProxy;
   pdfScaleValue: string;
   onSelectionFinished: (
@@ -371,50 +369,6 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
     this.renderHighlightLayers();
   };
 
-  scrollTo = (highlight: T_HT) => {
-    const { pageNumber, boundingRect, usePdfCoordinates } = highlight.position;
-
-    this.viewer.container.removeEventListener("scroll", this.onScroll);
-
-    const pageViewport = this.viewer.getPageView(pageNumber - 1).viewport;
-
-    const scrollMargin = 10;
-
-    this.viewer.scrollPageIntoView({
-      pageNumber,
-      destArray: [
-        null,
-        { name: "XYZ" },
-        ...pageViewport.convertToPdfPoint(
-          0,
-          scaledToViewport(boundingRect, pageViewport, usePdfCoordinates).top -
-            scrollMargin
-        ),
-        0,
-      ],
-    });
-
-    this.setState(
-      {
-        scrolledToHighlightId: highlight.id,
-      },
-      () => this.renderHighlightLayers()
-    );
-
-    // wait for scrolling to finish
-    setTimeout(() => {
-      this.viewer.container.addEventListener("scroll", this.onScroll);
-    }, 100);
-  };
-
-  onDocumentReady = () => {
-    const { scrollRef } = this.props;
-
-    this.handleScaleValue();
-
-    scrollRef(this.scrollTo);
-  };
-
   onSelectionChange = () => {
     const container = this.containerNode;
     const selection = getWindow(container).getSelection();
@@ -444,22 +398,6 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
     });
 
     this.debouncedAfterSelection();
-  };
-
-  onScroll = () => {
-    const { onScrollChange } = this.props;
-
-    console.log('testing on scroll');
-    onScrollChange();
-
-    this.setState(
-      {
-        scrolledToHighlightId: EMPTY_ID,
-      },
-      () => this.renderHighlightLayers()
-    );
-
-    this.viewer.container.removeEventListener("scroll", this.onScroll);
   };
 
   onMouseDown: PointerEventHandler = (event) => {
