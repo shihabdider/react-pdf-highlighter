@@ -29,10 +29,6 @@ const getNextId = () => String(Math.random()).slice(2);
 const parseIdFromHash = () =>
   document.location.hash.slice("#highlight-".length);
 
-const resetHash = () => {
-  document.location.hash = "";
-};
-
 const HighlightPopup = ({
   comment,
 }: {
@@ -154,13 +150,6 @@ class App extends Component<{}, State> {
               <PdfHighlighter
                 pdfDocument={pdfDocument}
                 enableAreaSelection={(event) => event.altKey}
-                onScrollChange={resetHash}
-                // pdfScaleValue="page-width"
-                scrollRef={(scrollTo) => {
-                  this.scrollViewerTo = scrollTo;
-
-                  this.scrollToHighlightFromHash();
-                }}
                 onSelectionFinished={(
                   position,
                   content,
