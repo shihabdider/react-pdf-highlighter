@@ -78,6 +78,7 @@ interface Props<T_HT> {
     transformSelection: () => void
   ) => JSX.Element | null;
   enableAreaSelection: (event: MouseEvent) => boolean;
+  onScroll: (scrollPosition: { scrollTop: number; scrollLeft: number }) => void;
 }
 
 const EMPTY_ID = "empty-id";
@@ -127,6 +128,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
 
   componentDidMount() {
     this.init();
+    this.attachScrollListener();
   }
 
   attachRef = () => {
@@ -192,7 +194,34 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
 
   componentWillUnmount() {
     this.unsubscribe();
+    this.detachScrollListener();
   }
+
+  attachScrollListener = () => {
+    const container = this.containerNode;
+    console.log('attachScrollListener', container);
+    if (container) {
+      container.addEventListener('scroll', this.handleScroll);
+    }
+  };
+
+  detachScrollListener = () => {
+    const container = this.containerNode;
+    if (container) {
+      container.removeEventListener('scroll', this.handleScroll);
+    }
+  };
+
+  handleScroll = () => {
+    const { onScroll } = this.props;
+    const container = this.containerNode;
+    if (onScroll && container) {
+      onScroll({
+        scrollTop: container.scrollTop,
+        scrollLeft: container.scrollLeft,
+      });
+    }
+  };
 
   findOrCreateHighlightLayer(page: number) {
     const { textLayer } = this.viewer.getPageView(page - 1) || {};
@@ -425,6 +454,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
   };
 
   afterSelection = () => {
+    console.log("afterSelection");
     const { onSelectionFinished } = this.props;
 
     const { isCollapsed, range } = this.state;
