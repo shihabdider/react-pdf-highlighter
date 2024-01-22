@@ -105,6 +105,16 @@ class App extends Component<{}, State> {
     });
   }
 
+  onPdfViewerLoaded = () => {
+    const pdfHighlighterElement = document.querySelector('.PdfHighlighter');
+    console.log(pdfHighlighterElement);
+    if (pdfHighlighterElement) {
+      pdfHighlighterElement.scrollTo({top: 1000, behavior: 'smooth'});
+    } else {
+      console.log('PdfHighlighter element not found');
+    }
+  }
+
   updateHighlight(highlightId: string, position: Object, content: Object) {
     console.log("Updating highlight", highlightId, position, content);
 
@@ -148,7 +158,7 @@ class App extends Component<{}, State> {
           <PdfLoader url={url} beforeLoad={<Spinner />}>
             {(pdfDocument) => (
               <PdfHighlighter
-                onPdfViewerLoaded={() => console.log(document.querySelector('.PdfHighlighter'))}
+                onPdfViewerLoaded={this.onPdfViewerLoaded}
                 onScroll={(pos) => console.log(pos)}
                 pdfDocument={pdfDocument}
                 enableAreaSelection={(event) => event.altKey}
