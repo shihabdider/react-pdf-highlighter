@@ -105,14 +105,9 @@ class App extends Component<{}, State> {
     });
   }
 
-  onPdfViewerLoaded = () => {
-    const pdfHighlighterElement = document.querySelector('.PdfHighlighter');
-    console.log(pdfHighlighterElement);
-    if (pdfHighlighterElement) {
-      pdfHighlighterElement.scrollTo({top: 1000, behavior: 'smooth'});
-    } else {
-      console.log('PdfHighlighter element not found');
-    }
+  onViewerLoaded = (viewer: any) => {
+    console.log(viewer)
+    // viewer.scrollPageIntoView({pageNumber: 3})
   }
 
   updateHighlight(highlightId: string, position: Object, content: Object) {
@@ -158,7 +153,7 @@ class App extends Component<{}, State> {
           <PdfLoader url={url} beforeLoad={<Spinner />}>
             {(pdfDocument) => (
               <PdfHighlighter
-                onPdfViewerLoaded={this.onPdfViewerLoaded}
+                onViewerLoaded={this.onViewerLoaded}
                 onScroll={(pos) => console.log(pos)}
                 pdfDocument={pdfDocument}
                 enableAreaSelection={(event) => event.altKey}

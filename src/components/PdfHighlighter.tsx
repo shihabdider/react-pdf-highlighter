@@ -78,8 +78,8 @@ interface Props<T_HT> {
     transformSelection: () => void
   ) => JSX.Element | null;
   enableAreaSelection: (event: MouseEvent) => boolean;
-  onScroll: (scrollPosition: { scrollTop: number; scrollLeft: number }) => void;
-  onTextLayerLoaded: () => void;
+  onScroll: (scrollPosition: { scrollTop: number; scrollLeft: number, pageNumber: number }) => void;
+  onViewerLoaded: (viewer: any) => void;
 }
 
 const EMPTY_ID = "empty-id";
@@ -214,9 +214,11 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
     const { onScroll } = this.props;
     const container = this.containerNode;
     if (onScroll && container) {
+      const pageNumber = this.viewer.currentPageNumber;
       onScroll({
         scrollTop: container.scrollTop,
         scrollLeft: container.scrollLeft,
+        pageNumber: pageNumber
       });
     }
   };
@@ -394,12 +396,12 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
 
   onTextLayerRendered = () => {
     this.renderHighlightLayers();
-    const { onTextLayerLoaded } = this.props;
-    onTextLayerLoaded(this.viewer);
   };
 
   onDocumentReady = () => {
     this.handleScaleValue();
+    const { onViewerLoaded } = this.props;
+    onViewerLoaded(this.viewer);
   };
 
   onSelectionChange = () => {
