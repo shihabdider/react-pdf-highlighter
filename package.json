@@ -19,6 +19,7 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "(cd ./example && vite)",
+    "prepare": "npm run build",
     "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:copy-styles && npm run build:example",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir ./dist/cjs",
