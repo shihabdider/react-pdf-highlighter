@@ -449,6 +449,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
   onScroll = () => {
     const { onScrollChange } = this.props;
 
+    console.log('testing on scroll');
     onScrollChange();
 
     this.setState(
